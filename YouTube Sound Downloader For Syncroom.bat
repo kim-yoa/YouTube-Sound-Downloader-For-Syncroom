@@ -18,7 +18,7 @@ if not exist "Dependencies\yt-dlp.exe" (
 )
 
 REM ffmpeg Essentials 설치 여부 확인
-if not exist "Dependencies\bin\ffmpeg.exe" (
+if not exist "Dependencies\ffmpeg.exe" (
     if not defined already_shown (
         set already_shown=1
         echo 필수 파일 설치하는 중...
@@ -27,30 +27,13 @@ if not exist "Dependencies\bin\ffmpeg.exe" (
     if not exist "Dependencies\bin" (
         mkdir Dependencies\bin
     )
-    curl -L https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z -o Dependencies\ffmpeg-essentials.7z >nul 2>&1
-    
-    REM 7-Zip 설치 여부 확인
-    if not exist "%ProgramFiles%\7-Zip\7z.exe" (
-        echo 7-Zip을/를 설치하는 중...
-        curl -L https://www.7-zip.org/a/7z1900-x64.exe -o Dependencies\7zip.exe >nul 2>&1
-        Dependencies\7zip.exe /S >nul 2>&1
-        echo 7-Zip 설치 완료!
-    )
-    
-    "%ProgramFiles%\7-Zip\7z.exe" x Dependencies\ffmpeg-essentials.7z -oDependencies\bin >nul 2>&1
-    for /D %%d in (Dependencies\bin\ffmpeg-*-essentials_build) do (
-        xcopy /E /I "%%d" Dependencies >nul 2>&1
-        rd /S /Q "%%d" >nul 2>&1
-    )
-    del /Q Dependencies\ffmpeg-essentials.7z >nul 2>&1
-    echo ffmpeg Essentials 설치 완료!
-)
+    curl -L https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -o Dependencies\ffmpeg-essentials.zip >nul 2>&1
+    echo test
 
-REM 7-Zip 삭제
-if exist "Dependencies\7zip.exe" (
-    del /Q "Dependencies\7zip.exe" >nul 2>&1
-    rmdir /S /Q "%ProgramFiles%\7-Zip" >nul 2>&1
-    echo 7-Zip 삭제 완료!
+    REM ffmpeg 압축 해제
+    tar -xf Dependencies\ffmpeg-essentials.zip -C Dependencies --strip-components=1 >nul 2>&1
+    del /Q Dependencies\ffmpeg-essentials.zip >nul 2>&1
+    echo ffmpeg Essentials 설치 완료!
 )
 
 REM 출력 디렉토리 설정
@@ -64,7 +47,7 @@ if not exist "%output_dir%" (
 :input
 REM 사용자로부터 링크와 파일 이름을 입력받음
 set /p link=유튜브 링크를 입력하세요: 
-set /p filename=저장할 파일 이름을 입력하세요: 
+set /p filename=저장할 파일 이름을 입력받으세요: 
 
 REM 유튜브 링크에서 11자리 비디오 ID 추출
 for /f "tokens=2 delims==&" %%A in ("%link%") do set video_id=%%A
