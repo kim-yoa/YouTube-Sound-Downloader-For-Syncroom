@@ -18,7 +18,7 @@ if not exist "Dependencies\yt-dlp.exe" (
 )
 
 REM ffmpeg Essentials 설치 여부 확인
-if not exist "Dependencies\ffmpeg.exe" (
+if not exist "Dependencies\bin\ffmpeg.exe" (
     if not defined already_shown (
         set already_shown=1
         echo 필수 파일 설치하는 중...
@@ -28,7 +28,6 @@ if not exist "Dependencies\ffmpeg.exe" (
         mkdir Dependencies\bin
     )
     curl -L https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip -o Dependencies\ffmpeg-essentials.zip >nul 2>&1
-    echo test
 
     REM ffmpeg 압축 해제
     tar -xf Dependencies\ffmpeg-essentials.zip -C Dependencies --strip-components=1 >nul 2>&1
